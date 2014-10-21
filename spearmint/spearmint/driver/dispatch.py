@@ -1,6 +1,9 @@
 
 
 class DispatchDriver(object):
+    def get_max_concurrent(self):
+        pass
+
     def submit_job(job):
         '''Schedule a job for execution.'''
         pass

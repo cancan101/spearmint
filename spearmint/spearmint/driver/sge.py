@@ -25,6 +25,19 @@ DEFAULT_MODULES = [ 'packages/epd/7.1-2',
 #module load %s
 
 class SGEDriver(DispatchDriver):
+    def get_max_concurrent(self):
+        command = "qstat -g c -q all.q | tail -n 1 |  awk '{print $6}'"
+        process = subprocess.Popen(command,
+                                   stdin=subprocess.PIPE,
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.STDOUT,
+                                   shell=True)
+        output = process.communicate()[0]
+        process.stdin.close()
+        try:
+            return int(output.strip())
+        except:
+            return None
 
     def submit_job(self, job):
         output_file = job_output_file(job)

@@ -239,8 +239,15 @@ def attempt_dispatch(expt_config, expt_dir, chooser, driver, options):
         log("There are no candidates left.  Exiting.")
         return False
 
-    if n_pending >= options.max_concurrent:
-        log("Maximum number of jobs (%d) pending." % (options.max_concurrent))
+    max_concurrent = options.max_concurrent
+    if max_concurrent == -1:
+        max_concurrent = driver.get_max_concurrent()
+        if max_concurrent is None:
+            max_concurrent = 1
+        log("max_concurrent from driver of %d" % max_concurrent)
+
+    if n_pending >= max_concurrent:
+        log("Maximum number of jobs (%d) pending." % (max_concurrent))
         return True
 
     else:
