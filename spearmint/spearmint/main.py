@@ -328,6 +328,7 @@ def sigint_handler(signal, frame):
 if __name__=='__main__':
     print "setting up signal handler..."
     signal.signal(signal.SIGINT, sigint_handler)
+    signal.signal(signal.SIGTERM, sigint_handler)
     main()
     print "Exiting app"
     if web_proc:
