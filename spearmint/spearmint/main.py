@@ -136,6 +136,7 @@ def start_web_view(options, experiment_config, chooser):
     debug = (options.verbose == True)
     start_web_app = lambda: app.run(debug=debug, port=port, host=options.web_status_host)
     proc = multiprocessing.Process(target=start_web_app)
+    proc.daemon = True
     proc.start()
 
     return proc
@@ -319,6 +320,7 @@ def sigint_handler(signal, frame):
     if web_proc:
         print "closing web server...",
         web_proc.terminate()
+        web_proc = None
         print "done"
     sys.exit(0)
 
@@ -327,4 +329,10 @@ if __name__=='__main__':
     print "setting up signal handler..."
     signal.signal(signal.SIGINT, sigint_handler)
     main()
+    print "Exiting app"
+    if web_proc:
+        print "closing web server (after main!)...",
+        web_proc.terminate()
+        web_proc = None
+        print "done"
 
