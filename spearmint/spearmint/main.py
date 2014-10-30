@@ -143,6 +143,7 @@ def start_web_view(options, experiment_config, chooser):
 
 
 def main():
+    global web_proc
     (options, args) = parse_args()
 
     if options.job:
@@ -324,6 +325,7 @@ def check_experiment_dirs(expt_dir):
 
 # Cleanup locks and processes on ctl-c
 def sigint_handler(signal, frame):
+    global web_proc
     if web_proc:
         print "closing web server...",
         web_proc.terminate()
