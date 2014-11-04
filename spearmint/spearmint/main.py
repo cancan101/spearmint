@@ -241,10 +241,12 @@ def attempt_dispatch(expt_config, expt_dir, chooser, driver, options):
         return False
 
     max_concurrent = options.max_concurrent
-    if max_concurrent == -1:
-        max_concurrent = driver.get_max_concurrent()
-        if max_concurrent is None:
+    if max_concurrent <= 0:
+        max_concurrent_drv = driver.get_max_concurrent()
+        if max_concurrent_drv is None:
             max_concurrent = 1
+        else:
+            max_concurrent += max_concurrent_drv
         log("max_concurrent from driver of %d" % max_concurrent)
 
     if n_pending >= max_concurrent:
