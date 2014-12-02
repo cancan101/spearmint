@@ -186,8 +186,13 @@ class ExperimentGrid:
         fh.close()
 
         # Use an atomic move for better NFS happiness.
-        cmd = 'mv "%s" "%s"' % (fh.name, self.jobs_pkl)
-        os.system(cmd) # TODO: Should check system-dependent return status.
+        cmd = 'mv "%s" "%s.new"' % (fh.name, self.jobs_pkl)
+        assert os.system(cmd) == 0 # TODO: Should check system-dependent return status.
+
+        if os.path.exists(self.jobs_pkl):
+            assert os.system('mv "%s" "%s.old"' % (self.jobs_pkl, self.jobs_pkl)) == 0
+
+        assert os.system('mv "%s.new" "%s"' % (self.jobs_pkl, self.jobs_pkl)) == 0
 
     def _hypercube_grid(self, dims, size):
         # Generate from a sobol sequence
