@@ -122,9 +122,14 @@ class SGEDriver(DispatchDriver):
                 return False
             else:
                 return True
-
+        except:
+            log("EXC: %s\n" % (str(sys.exc_info()[0])))
+            raise
         finally:
-            s.exit()
+            try:
+                s.exit()
+            except drmaa.errors.NoActiveSessionException:
+                pass
 
 
 def init():
