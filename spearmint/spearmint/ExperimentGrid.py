@@ -60,6 +60,7 @@ class ExperimentGrid:
         expt_grid.set_broken(id)
 
     def __init__(self, expt_dir, variables=None, grid_size=None, grid_seed=1):
+        self._ready = False
         self.expt_dir = expt_dir
         self.jobs_pkl = os.path.join(expt_dir, EXPERIMENT_GRID_FILE)
         self.locker   = Locker()
@@ -76,8 +77,8 @@ class ExperimentGrid:
             self.values   = np.zeros(grid_size) + np.nan
             self.durs     = np.zeros(grid_size) + np.nan
             self.proc_ids = np.zeros(grid_size, dtype=int)
+            self._ready = True
             self._save_jobs()
-
         # Or load in the grid from the pickled file.
         else:
             self._load_jobs()
@@ -172,9 +173,12 @@ class ExperimentGrid:
         self.values = jobs['values']
         self.durs   = jobs['durs']
         self.proc_ids = jobs['proc_ids']
+        self._ready = True
 
     def _save_jobs(self):
 
+        if not self._ready:
+            return
         # Write everything to a temporary file first.
         fh = tempfile.NamedTemporaryFile(mode='w', delete=False)
         cPickle.dump({ 'vmap'   : self.vmap,
