@@ -80,7 +80,7 @@ function line_chart(height, width, margin, y_data) {
         .attr("x1", x(-0.2))
         .attr("y2", function(d) { return -1 * y(d); })
         .attr("x2", x(0));
-
+/*
     svg.append("g")
 	.attr("class", "y axis")
 	.call(yAxis)
@@ -90,7 +90,7 @@ function line_chart(height, width, margin, y_data) {
 	.attr("dy", ".71em")
 	.style("text-anchor", "end")
 	.text("Temperature (ºF)");
-
+*/
     /*
        svg.append("text")
        .attr("x", width / 2)
